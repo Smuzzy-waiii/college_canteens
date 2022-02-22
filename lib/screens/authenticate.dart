@@ -151,7 +151,10 @@ class _AuthenticateState extends State<Authenticate> {
                         _verificationId = verificationId;
                       });
                     },
-                    codeAutoRetrievalTimeout: (verificationId) async {});
+                    codeAutoRetrievalTimeout: (verificationId) async {
+                      print("AutoRetrievalTimeout");
+                      Navigator.popAndPushNamed(context, '/auth');
+                    });
               }
             },
           ),
