@@ -3,13 +3,14 @@ import 'package:college_canteens/screens/admin_homepage.dart';
 import 'package:college_canteens/screens/authenticate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'screens/user_homepage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
 
@@ -56,7 +57,7 @@ class _InitializerWidgetState extends State<InitializerWidget> {
 
   Future<void> route() async {
     if (_user == null) {
-      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
         Navigator.pushReplacementNamed(context, '/auth');
       });
     } else {

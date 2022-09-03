@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>502537194817-f3dsa5mpe8qg5a078g422ao1go8tibbp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.502537194817-f3dsa5mpe8qg5a078g422ao1go8tibbp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>502537194817-sp9p46hd99cok2nlhvlrkj81955fa9mr.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBBTPMU36hCYQaTz6HsXIIn29_w3ju6CUA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>502537194817</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.university.canteens.collegeCanteens</string>
+	<key>PROJECT_ID</key>
+	<string>peswoes</string>
+	<key>STORAGE_BUCKET</key>
+	<string>peswoes.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:502537194817:ios:5424c9a4bc28fff60525c0</string>
+</dict>
+</plist>
