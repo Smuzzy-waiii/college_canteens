@@ -25,7 +25,7 @@ class _ServedOrdersState extends State<ServedOrders>
       itemBuilderType: PaginateBuilderType.listView,
       isLive: true,
       itemBuilder: (index, context, snapshot) {
-        DocumentSnapshot order = snapshot;
+        DocumentSnapshot order = snapshot as DocumentSnapshot<Object?>;
         Map items = order['items'];
 
         return Container(

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "502537194817",
+    "project_id": "peswoes",
+    "storage_bucket": "peswoes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502537194817:android:77d8eb90af36151c0525c0",
+        "android_client_info": {
+          "package_name": "com.university.canteens.college_canteens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "502537194817-g7d4omk8j7ss4vm0b70qt15eavbq2l6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.university.canteens.college_canteens",
+            "certificate_hash": "b0dc5fb4bd88ec5f9e7f2047c9f16b41486a81f9"
+          }
+        },
+        {
+          "client_id": "502537194817-jeckb7abt6bd5qaim1p03jbchipl6i3d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPoA7R2vLqeUYt8TXNq6BNG9IqJjTIJA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "502537194817-jeckb7abt6bd5qaim1p03jbchipl6i3d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "502537194817-f3dsa5mpe8qg5a078g422ao1go8tibbp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.university.canteens.collegeCanteens"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
