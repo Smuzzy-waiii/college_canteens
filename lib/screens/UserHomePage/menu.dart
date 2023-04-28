@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 import 'dart:core';
 import 'package:uuid/uuid.dart';
 
@@ -13,6 +14,71 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  //Razorpay stuff
+  Razorpay razorpay = Razorpay();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handlerExternalWallet);
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlerPaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlerError);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    razorpay.clear();
+  }
+
+  void openCheckout() {
+    var options = {
+      "key": "rzp_test_3zZaRWFALdsXve",
+      "amount": subtotal * 100,
+      "name": "Sample App",
+      "description": "Payment for the product",
+      "prefill": {
+        "contact": "8618950413", //"9513388379",
+        "email": "smaran.jawalkar@gmail.com",
+      },
+      "external": {
+        "wallets": ["paytm"]
+      }
+    };
+
+    try {
+      razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void handlerError(PaymentFailureResponse response) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Payment failed"),
+            content: Text("Transaction failed. Please try again"),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+    print('Payment error');
+  }
+
+  void handlerExternalWallet(ExternalWalletResponse response) {
+    print('External Wallet');
+  }
+
+  //Actual product stuff
   final Stream<DocumentSnapshot<Map<String, dynamic>>> menuItems =
       FirebaseFirestore.instance
           .doc('Colleges/PES - RR/Canteens/13th Floor Canteen')
@@ -165,104 +231,30 @@ class _MenuState extends State<Menu> {
                           Row(
                             children: [
                               OutlinedButton(
-                                child: Text("Pay"),
-                                onPressed: () async {
-                                  String username = widget.usrdata['username'];
-                                  var event = await FirebaseFirestore.instance
-                                      .doc('Users/$username')
-                                      .get();
-                                  Map<String, dynamic> user =
-                                      event.data() as Map<String, dynamic>;
-                                  int balance = user['Balance'];
-
-                                  if (subtotal == 0) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text("Cart Empty"),
-                                            content: const Text(
-                                                "Cart is Empty. Please Add items to cart"),
-                                            actions: [
-                                              TextButton(
-                                                child: const Text("OK"),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                  } else if (balance < subtotal) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text("Alert"),
-                                            content: const Text(
-                                                "Insuffient balance. Please Recharge Wallet"),
-                                            actions: [
-                                              TextButton(
-                                                child: const Text("OK"),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                  } else {
-                                    var collection = FirebaseFirestore.instance
-                                        .collection(
-                                            'Colleges/PES - RR/Canteens/13th Floor Canteen/Orders');
-                                    var uuid = Uuid();
-                                    var ord_id = uuid.v4().toString();
-                                    DateTime now = DateTime.now();
-                                    collection.doc(ord_id).set({
-                                      "user": username,
-                                      "price": subtotal,
-                                      "items": cart,
-                                      "timestamp": now,
-                                      "isServed": false
-                                    });
-
-                                    await showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          List<Widget> wlist = [];
-                                          cart.keys.toList().forEach((key) {
-                                            wlist.add(Text(
-                                                "${key} - ${cart[key]['quantity'].toString()}"));
-                                          });
-                                          return AlertDialog(
-                                            title: Text("Order Confirmed!"),
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Order Id: ${ord_id}\n"),
-                                                Text("Order:"),
-                                                ...wlist
+                                  child: Text("Pay"),
+                                  onPressed: () async {
+                                    if (subtotal == 0) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: const Text("Cart Empty"),
+                                              content: const Text(
+                                                  "Cart is Empty. Please Add items to cart"),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text("OK"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
                                               ],
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                child: Text("OK"),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              )
-                                            ],
-                                          );
-                                        });
-                                    setState(() {
-                                      subtotal = 0;
-                                      cart = {};
-                                    });
-                                  }
-                                },
-                              ),
+                                            );
+                                          });
+                                      return;
+                                    }
+                                    openCheckout();
+                                  }),
                               SizedBox(
                                 width: 20,
                               )
@@ -277,5 +269,60 @@ class _MenuState extends State<Menu> {
         },
       ),
     );
+  }
+
+  void handlerPaymentSuccess(PaymentSuccessResponse response) {
+    String username = widget.usrdata['username'];
+    var collection = FirebaseFirestore.instance
+        .collection('Colleges/PES - RR/Canteens/13th Floor Canteen/Orders');
+    var uuid = Uuid();
+    var ord_id = uuid.v4().toString();
+    DateTime now = DateTime.now();
+    collection.doc(ord_id).set({
+      "user": username,
+      "price": subtotal,
+      "items": cart,
+      "timestamp": now,
+      "isServed": false,
+      "transaction_details": {
+        "razorpay_payment_id": response.paymentId,
+        "razorpay_order_id": response.orderId,
+        "razorpay_signature": response.signature
+      }
+    });
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          List<Widget> wlist = [];
+          cart.keys.toList().forEach((key) {
+            wlist.add(Text("${key} - ${cart[key]['quantity'].toString()}"));
+          });
+          return AlertDialog(
+            title: Text("Order Confirmed!"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Order Id: ${ord_id}\n"),
+                Text("Order:"),
+                ...wlist
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        }).then((value) {
+      setState(() {
+        subtotal = 0;
+        cart = {};
+      });
+    });
   }
 }
