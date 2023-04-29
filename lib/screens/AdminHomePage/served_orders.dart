@@ -24,9 +24,10 @@ class _ServedOrdersState extends State<ServedOrders>
           .orderBy("timestamp", descending: true),
       itemBuilderType: PaginateBuilderType.listView,
       isLive: true,
-      itemBuilder: (index, context, snapshot) {
-        DocumentSnapshot order = snapshot as DocumentSnapshot<Object?>;
-        Map items = order['items'];
+      itemBuilder: (context, snapshot,index) {
+        // DocumentSnapshot order = snapshot as DocumentSnapshot<Object?>;
+        final order = snapshot[index].data() as Map?;
+        Map items = order!['items'];
 
         return Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -36,7 +37,7 @@ class _ServedOrdersState extends State<ServedOrders>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("${order['user']} - Rs ${order['price']}\n"),
+                  Text("${order!['user']} - Rs ${order!['price']}\n"),
                   Text("Orders:"),
                   for (var key in items.keys)
                     Text("$key - ${items[key]['quantity'].toString()}"),

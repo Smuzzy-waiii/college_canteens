@@ -89,7 +89,12 @@ class _ChangeMenuState extends State<ChangeMenu> {
                                   Icons.edit,
                                   color: Colors.lightGreen,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  menu[key]['isAvailable'] =
+                                  !menu[key]['isAvailable'];
+                                  canteen.update({"Menu": menu});
+
+                                },
                               ),
                               IconButton(
                                 icon: Icon(
